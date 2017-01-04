@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITextFieldDelegate{
 
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var noteView: UITextView!
@@ -39,8 +39,8 @@ class ViewController: UIViewController {
             self.noteView.text = noteData
         }
     }
-
-    @IBAction func addNoteButtonTouched(_ sender: UIButton) {
+    
+    func addData(){
         let typedText:String? = self.textField.text
         if typedText != nil {
             var allNotesText:String = self.noteView.text
@@ -52,6 +52,17 @@ class ViewController: UIViewController {
             saveNotesToUserDefaults()
             self.textField.text = ""
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        addData()
+        textField.resignFirstResponder()
+        return true;
+    }
+
+    @IBAction func addNoteButtonTouched(_ sender: UIButton) {
+        textField.resignFirstResponder()
+        addData();
     }
 
 }
