@@ -12,15 +12,32 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var noteView: UITextView!
+    let NOTES_USER_DEFAULT_KEY:String = "NOTES_DATA"
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        loadNotesFromUserDefaults();
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func saveNotesToUserDefaults(){
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(self.noteView.text, forKey: NOTES_USER_DEFAULT_KEY)
+        userDefaults.synchronize()
+    }
+    
+    func loadNotesFromUserDefaults(){
+        let userDefaults = UserDefaults.standard
+        let noteData:String? = userDefaults.object(forKey: NOTES_USER_DEFAULT_KEY) as? String
+        if noteData != nil {
+            self.noteView.text = noteData
+        }
     }
 
     @IBAction func addNoteButtonTouched(_ sender: UIButton) {
@@ -32,6 +49,7 @@ class ViewController: UIViewController {
             }
             allNotesText = allNotesText + typedText!
             self.noteView.text = allNotesText
+            saveNotesToUserDefaults()
             self.textField.text = ""
         }
     }
